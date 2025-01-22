@@ -3,7 +3,7 @@ const router = express.Router();
 const { data } = require('../data/data.js');
 const { getRandomItem } = require('../modules/modules.js')
 
-router.get('/', (req, res, next) => {
+router.get('/get', (req, res, next) => {
     data.getSentences((err, result) => {
         if (err) {
             console.error('Error getting envelopes:', err);
@@ -29,20 +29,22 @@ router.get('/random', (req, res, next) => {
 });
 
 router.post('/add', (req, res, next) => {
-    const sentence = req.body.sentence;
+    const sentence = req.body.body.sentence;
 
     if (sentence.length > 4){
-        data.addSentence(req.body, (err, result) => {
+        data.addSentence(sentence, (err, result) => {
             if (err) {
-                console.error('Error adding envelopes to database:', err);
+                console.error('Error adding sentence to database:', err);
                 res.status(500).json({ error: 'Internal server error' });
                 return;
             }
-            res.status(200).json(result); // Send the result to the client as JSON
+            res.status(200).json({
+                message: 'Sentence added!'
+            }); // Send the result to the client as JSON
         });
     
     } else {
-    res.status(404).send('Invalid data received.\n\n note :\n - setence length should be 5 characters or more \n - request  body should look like this { "sentence" : "Hi there." }');
+        res.status(404).send('Invalid data received.\n\n note :\n - setence length should be 5 characters or more \n - request  body should look like this { "sentence" : "Hi there." }');
     }
 
 });

@@ -1,23 +1,31 @@
 const { Pool } = require('pg');
-// const DATABASE_URL = process.env.DATABASE_URL;
 
-// Connection pool configuration when online server deployed
-// const codeSwitcher = new Pool({
-//     connectionString: DATABASE_URL,
-// });
+const NODE_ENV = process.env.NODE_ENV;
+const DATABASE_URL = process.env.DATABASE_URL;
+let codeSwitcher;
+console.log(`Environment: ${NODE_ENV}`);
+console.log(`Database URL: ${DATABASE_URL}`);
 
-const codeSwitcher = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'CodeSwitching',
-    password: 'postgres',
-    port: 5432, 
-});
+if (NODE_ENV === "PROD") {
+    codeSwitcher = new Pool({
+        connectionString: DATABASE_URL,
+    });
+    
+} else {
+    
+    codeSwitcher = new Pool({
+        user: 'postgres',
+        host: 'localhost',
+        database: 'CodeSwitching',
+        password: 'postgres',
+        port: 5432, 
+    });
+}
+
   
 // Option for retrieving data fom database
 const data = {
-    addSentence: function(data, callback) {
-        const { sentence } = data;
+    addSentence: function(sentence, callback) {
         codeSwitcher.query('INSERT INTO sentences (sentence) VALUES ($1)', [sentence], (err, res) => {
             if (err) {
                 console.error('Error adding sentence:', err);
@@ -74,6 +82,49 @@ const data = {
         });
     }
 
+    ,
+
+    addVote: function(data, callback) {
+        const { sentence_id, vote } = data;
+    
+        let updateQuery;
+        if (vote === 'yes') {
+            updateQuery = 'UPDATE sentences SET yes_votes = yes_votes + 1 WHERE id = $1';
+        } else if (vote === 'no') {
+            updateQuery = 'UPDATE sentences SET no_votes = no_votes + 1 WHERE id = $1';
+        } else {
+            callback(new Error('Invalid vote type'), null);
+            return;
+        }
+    
+        codeSwitcher.query(updateQuery, [sentence_id], (err, res) => {
+            if (err) {
+                console.error('Error updating votes:', err);
+                callback(err, null);
+                return;
+            }
+            // Return the updated row
+            callback(null, 'Vote added');
+        });
+    }
+
 }
+
+// Listen for the exit event to close the connection pool when the application exits
+process.on('exit', () => {
+    console.log('Closing the connection pool...');
+    budgetManager.end(); // Close the connection pool
+  });
+  
+// Optionally, handle other signals that may cause your application to exit
+process.on('SIGINT', () => {
+console.log('Received SIGINT. Exiting...');
+process.exit(0);
+});
+
+process.on('SIGTERM', () => {
+console.log('Received SIGTERM. Exiting...');
+process.exit(0);
+});
 
 module.exports = { data };

@@ -2,6 +2,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express()
+require('dotenv').config();
+
 
 app.use(cors('tiny'))
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -20,7 +22,7 @@ app.get('/', (req, res) => {
 app.use('/sentences', sentenceRouter);
 app.use('/vote', voteRouter);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
