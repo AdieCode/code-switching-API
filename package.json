@@ -9,6 +9,7 @@
     "nodemon": "^3.1.0"
   },
   "scripts": {
-    "dev": "nodemon server/api/api.js"
+    "dev": "nodemon server/api/api.js",
+    "start": "node server/api/api.js"
   }
 }
