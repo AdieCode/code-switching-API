@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="40a9d84f-2852-4a07-887b-52de9c5bbc99" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/server/api/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/api/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/data/data.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/data/data.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/vote.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/vote.js" afterDir="false" />
-    </list>
+    <list default="true" id="40a9d84f-2852-4a07-887b-52de9c5bbc99" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,21 +13,21 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "AdieCode"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;AdieCode&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/AdieCode/code-switching-API.git",
-    "accountId": "69aa0148-373a-412a-96cc-59ebbcbd7676"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/AdieCode/code-switching-API.git&quot;,
+    &quot;accountId&quot;: &quot;69aa0148-373a-412a-96cc-59ebbcbd7676&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2ruBb4qVhxxZZHtB9PBPCo0fFDq" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -41,6 +40,10 @@
     "dart.analysis.tool.window.visible": "false",
     "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/Adriaan/Documents/VUE projects/Main_projects/main/Code-switching-app/back-end",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
@@ -61,6 +64,7 @@
       <option name="presentableId" value="Default" />
       <updated>1737399149766</updated>
       <workItem from="1737399151656" duration="42000" />
+      <workItem from="1737574919328" duration="615000" />
     </task>
     <servers />
   </component>

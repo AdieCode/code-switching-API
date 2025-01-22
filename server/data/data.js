@@ -9,6 +9,9 @@ console.log(`Database URL: ${DATABASE_URL}`);
 if (NODE_ENV === "PROD") {
     codeSwitcher = new Pool({
         connectionString: DATABASE_URL,
+        ssl: {
+            rejectUnauthorized: true, // Use true if you have a trusted certificate
+        }
     });
     
 } else {
@@ -21,6 +24,10 @@ if (NODE_ENV === "PROD") {
         port: 5432, 
     });
 }
+
+codeSwitcher.connect()
+  .then(() => console.log('Connected to the database'))
+  .catch((err) => console.error('Database connection error:', err));
 
   
 // Option for retrieving data fom database

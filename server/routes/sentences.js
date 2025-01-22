@@ -29,7 +29,7 @@ router.get('/random', (req, res, next) => {
 });
 
 router.post('/add', (req, res, next) => {
-    const sentence = req.body.body.sentence;
+    const sentence = req.body.sentence;
 
     if (sentence.length > 4){
         data.addSentence(sentence, (err, result) => {
