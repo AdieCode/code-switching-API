@@ -16,14 +16,14 @@ router.get('/get', (req, res, next) => {
 });
 
 router.get('/random', (req, res, next) => {
-    data.getSentences((err, result) => {
+    data.getRandomSentence((err, result) => {
         if (err) {
             console.error('Error getting envelopes:', err);
             res.status(500).json({ error: 'Internal server error' });
             return;
         }
-        const randomItem = getRandomItem(result);
-        res.status(200).json(randomItem); // Send the result to the client as JSON
+        
+        res.status(200).json(result); // Send the result to the client as JSON
     });
 
 });

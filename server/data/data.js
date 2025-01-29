@@ -54,6 +54,17 @@ const data = {
         });
     },
 
+    getRandomSentence: function(callback) {
+        codeSwitcher.query('SELECT sentence FROM sentences ORDER BY RANDOM() LIMIT 1', (err, res) => {
+            if (err) {
+                console.error('Error retrieving random sentence:', err);
+                callback(err, null);
+                return;
+            }
+            callback(null, res.rows[0]);
+        });
+    },
+
     addCorrection: function(data, callback) {
         const { sentence, sentence_id } = data;
         codeSwitcher.query('INSERT INTO corrections (sentence, sentence_id) VALUES ($1, $2)', [sentence, sentence_id], (err, res) => {
@@ -87,9 +98,7 @@ const data = {
             }
             callback(null, res.rows); // Return the newly added stack
         });
-    }
-
-    ,
+    },
 
     addVote: function(data, callback) {
         const { sentence_id, vote } = data;
