@@ -55,7 +55,7 @@ const data = {
     },
 
     getRandomSentence: function(callback) {
-        codeSwitcher.query('SELECT sentence FROM sentences ORDER BY RANDOM() LIMIT 1', (err, res) => {
+        codeSwitcher.query('SELECT sentence, id FROM sentences ORDER BY RANDOM() LIMIT 1', (err, res) => {
             if (err) {
                 console.error('Error retrieving random sentence:', err);
                 callback(err, null);
@@ -122,7 +122,19 @@ const data = {
             // Return the updated row
             callback(null, 'Vote added');
         });
-    }
+    },
+
+    addFeedback: function(data, callback) {
+        const { feedback, sentence_id } = data;
+        codeSwitcher.query('INSERT INTO comments (comment, sentence_id) VALUES ($1, $2)', [feedback, sentence_id], (err, res) => {
+            if (err) {
+                console.error('Error adding Correction:', err);
+                callback(err, null);
+                return;
+            }
+            callback(null, 'Correction added to database.'); // Return the newly added stack
+        });
+    },
 
 }
 
