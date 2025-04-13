@@ -1,13 +1,13 @@
 const express = require('express')
 const router = express.Router();
-const { data } = require('../data/data.js')
+const data = require('../data/index.js')
 
 router.post('/', (req, res, next) => {
     // const sentence_id = req.body.sentence_id;
     const vote = req.body.vote;
 
     if ( (vote === 'yes') || (vote === 'no') ){
-        data.addVote(req.body, (err, result) => {
+        data.updateData.addVote(req.body, (err, result) => {
             if (err) {
                 console.error('Error adding vote to database:', err);
                 res.status(500).json({ error: 'Internal server error' });

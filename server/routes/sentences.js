@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { data } = require('../data/data.js');
-const { getRandomItem } = require('../modules/modules.js')
+const data = require('../data/index.js');
 
 router.get('/get', (req, res, next) => {
-    data.getSentences((err, result) => {
+    data.getData.getSentences((err, result) => {
         if (err) {
             console.error('Error getting envelopes:', err);
             res.status(500).json({ error: 'Internal server error' });
@@ -15,8 +14,9 @@ router.get('/get', (req, res, next) => {
 
 });
 
-router.get('/random', (req, res, next) => {
-    data.getRandomSentence((err, result) => {
+router.post('/random', (req, res, next) => {
+    excludeIds = req.body?.excludeIds;
+    data.getData.getRandomSentence(excludeIds, (err, result) => {
         if (err) {
             console.error('Error getting envelopes:', err);
             res.status(500).json({ error: 'Internal server error' });
@@ -32,7 +32,7 @@ router.post('/add', (req, res, next) => {
     const sentence = req.body.sentence;
 
     if (sentence.length > 4){
-        data.addSentence(sentence, (err, result) => {
+        data.addData.addSentence(sentence, (err, result) => {
             if (err) {
                 console.error('Error adding sentence to database:', err);
                 res.status(500).json({ error: 'Internal server error' });
@@ -49,12 +49,13 @@ router.post('/add', (req, res, next) => {
 
 });
 
+
 router.post('/correction', (req, res, next) => {
     const sentence = req.body.sentence;
     const sentence_id = req.body.sentence;
 
     if (sentence.length > 4 && sentence_id){
-        data.addCorrection(req.body, (err, result) => {
+        data.addData.addCorrection(req.body, (err, result) => {
             if (err) {
                 console.error('Error adding envelopes to database:', err);
                 res.status(500).json({ error: 'Internal server error' });
@@ -74,7 +75,7 @@ router.post('/feedback', (req, res, next) => {
     const sentence_id = req.body.sentence_id;
 
     if (feedback.length > 4 && sentence_id){
-        data.addFeedback(req.body, (err, result) => {
+        data.addData.addFeedback(req.body, (err, result) => {
             if (err) {
                 console.error('Error adding envelopes to database:', err);
                 res.status(500).json({ error: 'Internal server error' });
