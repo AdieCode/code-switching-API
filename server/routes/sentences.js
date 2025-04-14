@@ -22,8 +22,12 @@ router.post('/random', (req, res, next) => {
             res.status(500).json({ error: 'Internal server error' });
             return;
         }
-        
-        res.status(200).json(result); // Send the result to the client as JSON
+
+        if (result) {
+            res.status(200).json(result); // Send the result to the client as JSON
+        } else {
+            res.status(404).send({sentence: 'No sentence found.'});
+        }
     });
 
 });
