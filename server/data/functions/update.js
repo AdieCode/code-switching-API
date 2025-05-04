@@ -38,6 +38,56 @@ const updateData = {
             callback(null, 'Vote added');
         });
     },
+    addCorretedEngVote: function(data, callback) {
+        const { corrected_sentence_id, vote } = data;
+        let column;
+        if (vote === 'yes') {
+            column = 'yes_votes';
+        }
+        else if (vote === 'no') {
+            column = 'no_votes';
+        } else {
+            callback(new Error('Invalid vote value'), null);
+            return;
+        }
+
+        const updateQuery = `UPDATE corrected_sentences_english SET ${column} = ${column} + 1  WHERE id = $1`;
+
+        codeSwitcherDB.query(updateQuery, [corrected_sentence_id], (err, res) => {
+            if (err) {
+                console.error('Error updating votes:', err);
+                callback(err, null);
+                return;
+            }
+            // Return the updated row
+            callback(null, 'Vote added');
+        });
+    },
+    addCorretedAfrVote: function(data, callback) {
+        const { corrected_sentence_id, vote } = data;
+        let column;
+        if (vote === 'yes') {
+            column = 'yes_votes';
+        }
+        else if (vote === 'no') {
+            column = 'no_votes';
+        } else {
+            callback(new Error('Invalid vote value'), null);
+            return;
+        }
+
+        const updateQuery = `UPDATE corrected_sentences_afrikaans SET ${column} = ${column} + 1 WHERE id = $1`;
+
+        codeSwitcherDB.query(updateQuery, [corrected_sentence_id], (err, res) => {
+            if (err) {
+                console.error('Error updating votes:', err);
+                callback(err, null);
+                return;
+            }
+            // Return the updated row
+            callback(null, 'Vote added');
+        });
+    },
 
 }
 

@@ -45,9 +45,21 @@ const getData = {
         });
     },    
 
-    getCorrections: function(data, callback) {
+    getCorrectionAfr: function(data, callback) {
         const { sentence_id } = data;
-        codeSwitcherDB.query('SELECT * FROM corrections WHERE $1', [sentence_id], (err, res) => {
+        codeSwitcherDB.query('SELECT * FROM corrected_sentences_afrikaans WHERE sentence_id = $1', [sentence_id], (err, res) => {
+            if (err) {
+                console.error('Error getting corrections:', err);
+                callback(err, null);
+                return;
+            }
+            callback(null, res.rows); // Return the newly added stack
+        });
+    },
+
+    getCorrectionEng: function(data, callback) {
+        const { sentence_id } = data;
+        codeSwitcherDB.query('SELECT * FROM corrected_sentences_english WHERE sentence_id = $1', [sentence_id], (err, res) => {
             if (err) {
                 console.error('Error getting corrections:', err);
                 callback(err, null);

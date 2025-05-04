@@ -34,9 +34,10 @@ router.post('/random', (req, res, next) => {
 
 router.post('/add', (req, res, next) => {
     const sentence = req.body.sentence;
+    const topic = req.body.topic;
 
-    if (sentence.length > 4){
-        data.addData.addSentence(sentence, (err, result) => {
+    if (sentence.length > 4 && topic){
+        data.addData.addSentence(sentence, topic, (err, result) => {
             if (err) {
                 console.error('Error adding sentence to database:', err);
                 res.status(500).json({ error: 'Internal server error' });
@@ -53,13 +54,56 @@ router.post('/add', (req, res, next) => {
 
 });
 
+router.get('/get/correction/afr', (req, res, next) => {
+    data.getData.getCorrectionAfr(req.query, (err, result) => {
+        if (err) {
+            console.error('Error getting envelopes:', err);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+        }
+        res.status(200).json(result); // Send the result to the client as JSON
+    });
+});
 
-router.post('/correction', (req, res, next) => {
+router.get('/get/correction/eng', (req, res, next) => {
+    data.getData.getCorrectionEng(req.query, (err, result) => {
+        if (err) {
+            console.error('Error getting envelopes:', err);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+        }
+        res.status(200).json(result); // Send the result to the client as JSON
+    });
+
+});
+
+
+router.post('/correction/afr', (req, res, next) => {
     const sentence = req.body.sentence;
-    const sentence_id = req.body.sentence;
+    const corrected_sentence_id = req.body.corrected_sentence_id;
 
-    if (sentence.length > 4 && sentence_id){
-        data.addData.addCorrection(req.body, (err, result) => {
+    if (sentence.length > 4 && corrected_sentence_id){
+        data.addData.addCorrectedSentenceAfr(req.body, (err, result) => {
+            if (err) {
+                console.error('Error adding envelopes to database:', err);
+                res.status(500).json({ error: 'Internal server error' });
+                return;
+            }
+            res.status(200).json(result); // Send the result to the client as JSON
+        });
+    
+    } else {
+    res.status(404).send('Invalid data received.\n\n note :\n - setence length should be 5 characters or more \n - request  body should look like this { "sentence" : "Hi there.", "sentence_id" : 4 }');
+    }
+
+});
+
+router.post('/correction/eng', (req, res, next) => {
+    const sentence = req.body.sentence;
+    const corrected_sentence_id = req.body.corrected_sentence_id;
+
+    if (sentence.length > 4 && corrected_sentence_id){
+        data.addData.addCorrectedSentenceEng(req.body, (err, result) => {
             if (err) {
                 console.error('Error adding envelopes to database:', err);
                 res.status(500).json({ error: 'Internal server error' });
