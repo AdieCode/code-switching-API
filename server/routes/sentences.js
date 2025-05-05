@@ -35,9 +35,11 @@ router.post('/random', (req, res, next) => {
 router.post('/add', (req, res, next) => {
     const sentence = req.body.sentence;
     const topic = req.body.topic;
+    const afrTranslation = req.body.afrTranslation;
+    const engTranslation = req.body.engTranslation;
 
-    if (sentence.length > 4 && topic){
-        data.addData.addSentence(sentence, topic, (err, result) => {
+    if (sentence.length > 4 && topic && afrTranslation && engTranslation){
+        data.addData.addSentence(sentence, afrTranslation, engTranslation, topic, (err, result) => {
             if (err) {
                 console.error('Error adding sentence to database:', err);
                 res.status(500).json({ error: 'Internal server error' });

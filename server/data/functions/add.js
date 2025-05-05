@@ -1,15 +1,60 @@
 const codeSwitcherDB = require('./pool.js');
 
 const addData = {
-    addSentence: function(sentence, topic, callback) {
-        codeSwitcherDB.query('INSERT INTO sentences (sentence, topic) VALUES ($1, $2)', [sentence, topic], (err, res) => {
-            if (err) {
-                console.error('Error adding sentence:', err);
-                callback(err, null);
-                return;
+    // addSentence: function(sentence, afrTranslation, engTranslation, topic, callback) {
+    //     codeSwitcherDB.query('INSERT INTO sentences (sentence, topic) VALUES ($1, $2) RETURNING *', [sentence, topic], (err, res) => {
+    //         if (err) {
+    //             console.error('Error adding sentence:', err);
+    //             callback(err, null);
+    //             return;
+    //         }
+    //         const { id } = res.rows[0];
+    //         callback(null, 'Sentence added to database.'); // Return the newly added stack
+    //     });
+    // },
+
+    addSentence: function(sentence, afrTranslation, engTranslation, topic, callback) {
+        codeSwitcherDB.query(
+            'INSERT INTO sentences (sentence, topic) VALUES ($1, $2) RETURNING *',
+            [sentence, topic],
+            (err, res) => {
+                if (err) {
+                    console.error('Error adding sentence:', err);
+                    callback(err, null);
+                    return;
+                }
+    
+                const { id } = res.rows[0];
+    
+                // Insert into corrected_sentences_afrikaans
+                codeSwitcherDB.query(
+                    'INSERT INTO corrected_sentences_afrikaans (text, sentence_id) VALUES ($1, $2)',
+                    [afrTranslation, id],
+                    (err1) => {
+                        if (err1) {
+                            console.error('Error adding Afrikaans translation:', err1);
+                            callback(err1, null);
+                            return;
+                        }
+    
+                        // Insert into corrected_sentences_english
+                        codeSwitcherDB.query(
+                            'INSERT INTO corrected_sentences_english (text, sentence_id) VALUES ($1, $2)',
+                            [engTranslation, id],
+                            (err2) => {
+                                if (err2) {
+                                    console.error('Error adding English translation:', err2);
+                                    callback(err2, null);
+                                    return;
+                                }
+    
+                                callback(null, res.rows[0]); // Return the full inserted sentence row
+                            }
+                        );
+                    }
+                );
             }
-            callback(null, 'Sentence added to database.'); // Return the newly added stack
-        });
+        );
     },
 
     addFeedback: function(data, callback) {
