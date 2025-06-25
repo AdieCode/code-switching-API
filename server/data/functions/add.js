@@ -13,7 +13,7 @@ const addData = {
     //     });
     // },
 
-    addSentence: function(sentence, afrTranslation, engTranslation, topic, callback) {
+    addSentence: function(sentence, incorrectSentence, afrTranslation, engTranslation, topic, callback) {
         codeSwitcherDB.query(
             'INSERT INTO sentences (sentence, topic) VALUES ($1, $2) RETURNING *',
             [sentence, topic],
@@ -23,32 +23,45 @@ const addData = {
                     callback(err, null);
                     return;
                 }
-    
+
                 const { id } = res.rows[0];
-    
-                // Insert into corrected_sentences_afrikaans
+
+                // Insert into incorrect_sentences
                 codeSwitcherDB.query(
-                    'INSERT INTO corrected_sentences_afrikaans (text, sentence_id) VALUES ($1, $2)',
-                    [afrTranslation, id],
-                    (err1) => {
-                        if (err1) {
-                            console.error('Error adding Afrikaans translation:', err1);
-                            callback(err1, null);
+                    'INSERT INTO incorrect_sentences (text, sentence_id) VALUES ($1, $2)',
+                    [incorrectSentence, id],
+                    (err0) => {
+                        if (err0) {
+                            console.error('Error adding incorrect sentence:', err0);
+                            callback(err0, null);
                             return;
                         }
-    
-                        // Insert into corrected_sentences_english
+
+                        // Insert into corrected_sentences_afrikaans
                         codeSwitcherDB.query(
-                            'INSERT INTO corrected_sentences_english (text, sentence_id) VALUES ($1, $2)',
-                            [engTranslation, id],
-                            (err2) => {
-                                if (err2) {
-                                    console.error('Error adding English translation:', err2);
-                                    callback(err2, null);
+                            'INSERT INTO corrected_sentences_afrikaans (text, sentence_id) VALUES ($1, $2)',
+                            [afrTranslation, id],
+                            (err1) => {
+                                if (err1) {
+                                    console.error('Error adding Afrikaans translation:', err1);
+                                    callback(err1, null);
                                     return;
                                 }
-    
-                                callback(null, res.rows[0]); // Return the full inserted sentence row
+
+                                // Insert into corrected_sentences_english
+                                codeSwitcherDB.query(
+                                    'INSERT INTO corrected_sentences_english (text, sentence_id) VALUES ($1, $2)',
+                                    [engTranslation, id],
+                                    (err2) => {
+                                        if (err2) {
+                                            console.error('Error adding English translation:', err2);
+                                            callback(err2, null);
+                                            return;
+                                        }
+
+                                        callback(null, res.rows[0]); // Return the full inserted sentence row
+                                    }
+                                );
                             }
                         );
                     }
